@@ -3,6 +3,7 @@
 #include <string.h>
 #include <string>
 #include <sstream>
+#include <iostream>
 #include <array>
 
 // https://github.com/dotnet/coreclr/blob/master/src/coreclr/hosts/inc/coreclrhost.h
@@ -39,43 +40,6 @@ typedef bool (*load_ptr)(const char* assemblyName);
 
 void BuildTpaList(const char* directory, const char* extension, std::string& tpaList);
 int ReportProgressCallback(int progress);
-
-std::wstring get_wdescription(HRESULT hresult) 
-{
-	if (hresult == 0)
-		return L"";
-
-	IErrorInfo * ei(nullptr);
-	long hr = GetErrorInfo(0, &ei);
-	if (hr == 0) {
-		BSTR bstr;
-		hr = ei->GetDescription(&bstr);
-		ei->Release();
-		if (hr < 0)
-			return L"";
-		std::wstring description(bstr);
-		SysFreeString(bstr);
-		return description;
-	}
-	else {
-		std::array<wchar_t, 256> bytes;
-		if (!FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM,
-			nullptr,
-			hresult,
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			bytes.data(),
-			static_cast<unsigned int>(bytes.size()),
-			nullptr))
-		{
-			std::wstringstream stringstream;
-			stringstream << L"HRESULT=0x" << std::hex << hresult;
-			return stringstream.str();
-		}
-		std::wstring description(bytes.data());
-		return description;
-	}
-	return L"";
-}
 
 int main(int argc, char* argv[])
 {
@@ -117,7 +81,11 @@ int main(int argc, char* argv[])
 #endif
 	if (coreClr == NULL)
 	{
+		printf("ERROR: %d\n", GetLastError());
 		printf("ERROR: Failed to load CoreCLR from %s\n", coreClrPath.c_str());
+
+        std::string name;
+        std::getline (std::cin,name);
 		return -1;
 	}
 	else
@@ -239,8 +207,6 @@ int main(int argc, char* argv[])
 	}
 	else
 	{
-		auto test = get_wdescription(hr);
-
 		printf("coreclr_create_delegate failed - status: 0x%08x\n", hr);
 		return -1;
 	}
@@ -290,7 +256,7 @@ int main(int argc, char* argv[])
 #if WINDOWS
 	CoTaskMemFree(ret2);
 #elif LINUX
-	free(ret);
+	free(ret2);
 #endif
 
 	//

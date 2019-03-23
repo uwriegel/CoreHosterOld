@@ -2,3 +2,9 @@
 
 LoadNetCore/x64
 ManagedLibrary/obj
+Standard/bin
+Standard/obj
+.vs
+.vscode/
+bin
+Debug/
