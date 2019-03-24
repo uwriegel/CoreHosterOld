@@ -81,7 +81,6 @@ int main(int argc, char* argv[])
 #endif
 	if (coreClr == NULL)
 	{
-		printf("ERROR: %d\n", GetLastError());
 		printf("ERROR: Failed to load CoreCLR from %s\n", coreClrPath.c_str());
 
         std::string name;
