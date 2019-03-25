@@ -41,13 +41,15 @@ typedef bool (*load_ptr)(const char* assemblyName);
 void BuildTpaList(const char* directory, const char* extension, std::string& tpaList);
 int ReportProgressCallback(int progress);
 
+char runtimePath[MAX_PATH];
+
 int main(int argc, char* argv[])
 {
 	// Get the current executable's directory
 	// This sample assumes that both CoreCLR and the
 	// managed assembly to be loaded are next to this host
 	// so we need to get the current path in order to locate those.
-	char runtimePath[MAX_PATH];
+	
 #if WINDOWS
 	GetFullPathNameA(argv[0], MAX_PATH, runtimePath, NULL);
 #elif LINUX
@@ -60,7 +62,12 @@ int main(int argc, char* argv[])
 	// Construct the CoreCLR path
 	// For this sample, we know CoreCLR's path. For other hosts,
 	// it may be necessary to probe for coreclr.dll/libcoreclr.so
-	std::string coreClrPath(runtimePath);
+	//std::string coreClrPath(runtimePath);
+
+    const char* crpath = "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.2.3";
+
+
+    std::string coreClrPath(crpath);
 	coreClrPath.append(FS_SEPARATOR);
 	coreClrPath.append(CORECLR_FILE_NAME);
 	
@@ -135,7 +142,7 @@ int main(int argc, char* argv[])
 	// For this host (as with most), assemblies next to CoreCLR will
 	// be included in the TPA list
 	std::string tpaList;
-	BuildTpaList(runtimePath, ".dll", tpaList);
+	BuildTpaList(crpath, ".dll", tpaList);
 
 	// <Snippet3>
 	// Define CoreCLR properties
@@ -329,6 +336,15 @@ void BuildTpaList(const char* directory, const char* extension, std::string& tpa
 		} while (FindNextFileA(fileHandle, &findData));
 		FindClose(fileHandle);
 	}
+
+	tpaList.append(runtimePath);
+	tpaList.append(FS_SEPARATOR);
+	tpaList.append("..\\..\\Standard.dll");
+	tpaList.append(PATH_DELIMITER);
+	tpaList.append(runtimePath);
+	tpaList.append(FS_SEPARATOR);
+	tpaList.append("ManagedLibrary.dll");
+	tpaList.append(PATH_DELIMITER);
 }
 // </Snippet7>
 #elif LINUX

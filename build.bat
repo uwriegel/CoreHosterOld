@@ -10,8 +10,8 @@ SET OUTDIR=%~dp0bin\windows
 mkdir %OUTDIR%
 
 REM Build managed component
-echo Building Managed Library
-dotnet publish --self-contained -r win10-x64 %SRCDIR%\ManagedLibrary\ManagedLibrary.csproj -o %OUTDIR%
+rem echo Building Managed Library
+rem dotnet publish --self-contained -r win10-x64 %SRCDIR%\ManagedLibrary\ManagedLibrary.csproj -o %OUTDIR%
 
 REM Build native component
 cl.exe %SRCDIR%\LoadNetCore\LoadNetCore.cpp /Fo%OUTDIR%\ /Fd%OUTDIR%\LoadNetCore.pdb /EHsc /Od /GS /sdl /Zi /D "WINDOWS" /link ole32.lib /out:%OUTDIR%\LoadNetCore.exe
