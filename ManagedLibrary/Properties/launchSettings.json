@@ -1,7 +1,8 @@
 {
   "profiles": {
     "ManagedLibrary": {
-      "commandName": "Project"
+      "commandName": "Executable",
+      "executablePath": "D:\\Projekte\\CoreHoster\\x64\\Debug\\LoadNetCore.exe"
     }
   }
 }

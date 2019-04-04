@@ -64,7 +64,7 @@ int main(int argc, char* argv[])
 	// it may be necessary to probe for coreclr.dll/libcoreclr.so
 	//std::string coreClrPath(runtimePath);
 
-    const char* crpath = "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.2.3";
+    const char* crpath = "C:\\Program Files\\dotnet\\shared\\Microsoft.NETCore.App\\2.2.2";
 
 
     std::string coreClrPath(crpath);
@@ -345,6 +345,18 @@ void BuildTpaList(const char* directory, const char* extension, std::string& tpa
 	tpaList.append(FS_SEPARATOR);
 	tpaList.append("ManagedLibrary.dll");
 	tpaList.append(PATH_DELIMITER);
+	tpaList.append(runtimePath);
+	tpaList.append(FS_SEPARATOR);
+	tpaList.append("Newtonsoft.Json.dll");
+	tpaList.append(PATH_DELIMITER);
+	tpaList.append(runtimePath);
+	tpaList.append(FS_SEPARATOR);
+	tpaList.append("Microsoft.CodeAnalysis.CSharp.dll");
+	tpaList.append(PATH_DELIMITER);
+	tpaList.append(runtimePath);
+	tpaList.append(FS_SEPARATOR);
+	tpaList.append("Microsoft.CodeAnalysis.dll");
+
 }
 // </Snippet7>
 #elif LINUX
